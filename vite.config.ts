@@ -7,13 +7,22 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
-    base: './',
+    base: '/',
     plugins: [
       react(), 
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+        injectRegister: 'auto',
+        includeAssets: ['pwa-192x192.png', 'pwa-512x512.png', 'pwa-icon.svg'],
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+        },
+        devOptions: {
+          enabled: true,
+          type: 'module',
+          navigateFallback: 'index.html',
+        },
         manifest: {
           name: 'E-dit Professional',
           short_name: 'E-dit',
@@ -21,6 +30,7 @@ export default defineConfig(({mode}) => {
           theme_color: '#0b0f1a',
           background_color: '#0b0f1a',
           display: 'standalone',
+          start_url: '/',
           icons: [
             {
               src: 'pwa-192x192.png',
