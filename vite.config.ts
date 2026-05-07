@@ -7,13 +7,13 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
-    base: '/',
+    base: './',
     plugins: [
       react(), 
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        injectRegister: false,
+        injectRegister: 'auto',
         includeAssets: ['pwa-192x192.png', 'pwa-512x512.png', 'pwa-icon.svg'],
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg}']
