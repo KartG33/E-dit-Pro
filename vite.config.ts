@@ -2,12 +2,36 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig, loadEnv} from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
     base: './',
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(), 
+      tailwindcss(),
+      VitePWA({
+        registerType: 'autoUpdate',
+        includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+        manifest: {
+          name: 'E-dit Professional',
+          short_name: 'E-dit',
+          description: 'A high-performance text formatting workspace for content creators',
+          theme_color: '#0b0f1a',
+          background_color: '#0b0f1a',
+          display: 'standalone',
+          icons: [
+            {
+              src: 'pwa-icon.svg',
+              sizes: '192x192 512x512',
+              type: 'image/svg+xml',
+              purpose: 'any maskable'
+            }
+          ]
+        }
+      })
+    ],
     define: {
       'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY),
     },
