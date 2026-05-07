@@ -14,7 +14,7 @@ export default defineConfig(({mode}) => {
       VitePWA({
         registerType: 'autoUpdate',
         injectRegister: 'auto',
-        includeAssets: ['pwa-192x192.png', 'pwa-512x512.png', 'pwa-icon.svg'],
+        includeAssets: ['pwa-48x48.png', 'pwa-64x64.png', 'pwa-128x128.png', 'pwa-180x180.png', 'pwa-192x192.png', 'pwa-256x256.png', 'pwa-512x512.png'],
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg}']
         },
@@ -30,11 +30,38 @@ export default defineConfig(({mode}) => {
           theme_color: '#0b0f1a',
           background_color: '#0b0f1a',
           display: 'standalone',
-          start_url: '/',
+          start_url: './',
+          scope: './',
+          orientation: 'portrait',
           icons: [
+            {
+              src: 'pwa-48x48.png',
+              sizes: '48x48',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-64x64.png',
+              sizes: '64x64',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-128x128.png',
+              sizes: '128x128',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-180x180.png',
+              sizes: '180x180',
+              type: 'image/png'
+            },
             {
               src: 'pwa-192x192.png',
               sizes: '192x192',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-256x256.png',
+              sizes: '256x256',
               type: 'image/png'
             },
             {
