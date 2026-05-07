@@ -205,6 +205,38 @@ export default function App() {
   ]);
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isInstallable, setIsInstallable] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    
+    window.addEventListener('appinstalled', () => {
+      setIsInstallable(false);
+      showToast('Приложение установлено!');
+    });
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setIsInstallable(false);
+    }
+    setDeferredPrompt(null);
+  };
+
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [templateData, setTemplateData] = useState<Record<string, string>>({});
 
@@ -323,6 +355,15 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-2">
+          {isInstallable && (
+            <button
+              onClick={handleInstallClick}
+              className="hidden md:flex items-center gap-1.5 rounded-lg border border-brand-accent/30 bg-brand-accent/10 px-3 py-1.5 text-xs font-bold text-brand-accent transition-colors hover:bg-brand-accent/20"
+            >
+              <FileDown className="h-4 w-4" /> Установить
+            </button>
+          )}
+
           <div className="hidden items-center gap-4 rounded-lg bg-brand-s2/50 px-4 py-1.5 md:flex">
             <StatItem value={stats.chars} label="симв" />
             <div className="h-4 w-[1px] bg-brand-b2" />
@@ -439,6 +480,8 @@ export default function App() {
             onRestore={handleTextChange}
             onDeleteNote={(id) => setNotes(prev => prev.filter(n => n.id !== id))}
             onDeleteHistory={(id) => setSessionHistory(prev => prev.filter(h => h.id !== id))}
+            isInstallable={isInstallable}
+            onInstall={handleInstallClick}
           />
         </aside>
       </main>
@@ -477,6 +520,8 @@ export default function App() {
                     onRestore={(t) => { handleTextChange(t); setSidebarOpen(false); }}
                     onDeleteNote={(id) => setNotes(prev => prev.filter(n => n.id !== id))}
                     onDeleteHistory={(id) => setSessionHistory(prev => prev.filter(h => h.id !== id))}
+                    isInstallable={isInstallable}
+                    onInstall={handleInstallClick}
                   />
                 </div>
               </div>
@@ -760,9 +805,17 @@ function ActionButton({ icon, label, onClick, disabled, color, className }: any)
   );
 }
 
-function SidebarContent({ activeTab, setActiveTab, notes, history, onRestore, onDeleteNote, onDeleteHistory }: any) {
+function SidebarContent({ activeTab, setActiveTab, notes, history, onRestore, onDeleteNote, onDeleteHistory, isInstallable, onInstall }: any) {
   return (
     <div className="flex h-full flex-col p-4">
+      {isInstallable && (
+        <button
+          onClick={onInstall}
+          className="mb-4 flex w-full items-center justify-center gap-2 rounded-lg bg-brand-accent py-2 text-xs font-bold text-white shadow-lg shadow-brand-accent/20 transition-all hover:bg-brand-accent/80 active:scale-95"
+        >
+          <FileDown className="h-4 w-4" /> Установить приложение
+        </button>
+      )}
       <div className="mb-4 flex rounded-lg bg-brand-s2 p-1 border border-brand-b1">
         <button 
           onClick={() => setActiveTab('notes')}
