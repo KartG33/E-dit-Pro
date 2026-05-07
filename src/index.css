@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Geologica", ui-sans-serif, system-ui;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-brand-bg: #0b0f1a;
+  --color-brand-s1: #111827;
+  --color-brand-s2: #1a2235;
+  --color-brand-s3: #1e2d47;
+  --color-brand-b1: #1f3054;
+  --color-brand-b2: #2a4070;
+  --color-brand-accent: #3b82f6;
+  --color-brand-indigo: #6366f1;
+  --color-brand-text: #c9d8f0;
+  --color-brand-dim: #6b8aad;
+  --color-brand-muted: #3d5475;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-bg text-white font-sans antialiased selection:bg-brand-accent/30 selection:text-white;
+    height: 100dvh;
+    overflow: hidden;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-brand-muted/50 rounded-full hover:bg-brand-muted;
+  }
+}
+
+.glass-panel {
+  @apply bg-brand-s1/80 backdrop-blur-md border-brand-b1;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
