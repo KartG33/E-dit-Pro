@@ -13,7 +13,7 @@ export default defineConfig(({mode}) => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        injectRegister: 'auto',
+        injectRegister: false,
         includeAssets: ['pwa-192x192.png', 'pwa-512x512.png', 'pwa-icon.svg'],
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg}']
@@ -35,6 +35,11 @@ export default defineConfig(({mode}) => {
             {
               src: 'pwa-192x192.png',
               sizes: '192x192',
+              type: 'image/png'
+            },
+            {
+              src: 'pwa-512x512.png',
+              sizes: '512x512',
               type: 'image/png'
             },
             {
